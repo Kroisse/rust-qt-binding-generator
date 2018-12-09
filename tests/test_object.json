@@ -1,6 +1,7 @@
 {
     "cppFile": "test_object_rust.cpp",
     "rust": {
+        "edition": "2018",
         "dir": "rust_object",
         "interfaceModule": "interface",
         "implementationModule": "implementation"

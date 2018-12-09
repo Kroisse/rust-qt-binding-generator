@@ -167,6 +167,22 @@ pub struct Rust {
     pub implementation_module: String,
     #[serde(rename = "interfaceModule")]
     pub interface_module: String,
+    #[serde(default)]
+    pub edition: RustEdition,
+}
+
+#[derive(Deserialize, Clone, Copy, PartialEq, PartialOrd)]
+pub enum RustEdition {
+    #[serde(rename = "2015")]
+    Edition2015,
+    #[serde(rename = "2018")]
+    Edition2018,
+}
+
+impl Default for RustEdition {
+    fn default() -> Self {
+        RustEdition::Edition2015
+    }
 }
 
 #[derive(Deserialize, Clone, Copy, PartialEq)]

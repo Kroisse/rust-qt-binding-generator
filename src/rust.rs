@@ -1263,10 +1263,8 @@ use std::char::decode_utf16;
 use std::sync::Arc;
 use std::sync::atomic::{{AtomicPtr, Ordering}};
 use std::ptr::null;
-
-use {}::*;",
-        conf.rust.implementation_module
-    )?;
+")?;
+    write_use_crate_module(conf, &mut r, &conf.rust.implementation_module)?;
 
     write_rust_types(conf, &mut r)?;
 
@@ -1282,6 +1280,14 @@ use {}::*;",
         .join(&conf.rust.interface_module);
     file.set_extension("rs");
     write_if_different(file, &r)
+}
+
+fn write_use_crate_module(conf: &Config, r: &mut dyn Write, path: &str) -> Result<()> {
+    if conf.rust.edition >= RustEdition::Edition2018 {
+        writeln!(r, "use crate::{}::*;", path)
+    } else {
+        writeln!(r, "use {}::*;", path)
+    }
 }
 
 fn write_rust_implementation_object(r: &mut Vec<u8>, o: &Object) -> Result<()> {
@@ -1517,11 +1523,10 @@ pub fn write_implementation(conf: &Config) -> Result<()> {
         r,
         "#![allow(unused_imports)]
 #![allow(unused_variables)]
-#![allow(dead_code)]
-use {}::*;
-",
-        conf.rust.interface_module
+#![allow(dead_code)]"
     )?;
+    write_use_crate_module(conf, &mut r, &conf.rust.interface_module)?;
+    writeln!(r)?;
 
     for object in conf.objects.values() {
         write_rust_implementation_object(&mut r, object)?;

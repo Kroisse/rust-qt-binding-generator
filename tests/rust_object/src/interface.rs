@@ -7,7 +7,7 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicPtr, Ordering};
 use std::ptr::null;
 
-use implementation::*;
+use crate::implementation::*;
 
 
 pub enum QString {}
